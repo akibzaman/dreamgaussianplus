@@ -76,7 +76,7 @@ percent_dense: 0.01
 density_start_iter: 100
 density_end_iter: 3000
 densification_interval: 100
-opacity_reset_interval: 700
+opacity_reset_interval: 450
 densify_grad_threshold: 0.01
 
 ### Textured Mesh

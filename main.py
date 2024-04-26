@@ -61,6 +61,14 @@ class GUI:
         self.optimizer = None
         self.step = 0
         self.train_steps = 1  # steps per rendering loop
+
+        self.ver_hor = []
+        for i in range(10):
+            cos = np.cos(np.pi/5*i)
+            circle_len = np.pi*2*cos
+            for j in range(int(circle_len.item()/0.1)):
+                self.ver_hor.append([np.rad2deg(np.pi/5*i), np.rad2deg(-np.pi + 2*np.pi/(circle_len//0.1)*j)])
+                self.ver_hor.append([-np.rad2deg(np.pi/5*i), np.rad2deg(-np.pi + 2*np.pi/(circle_len//0.1)*j)])
         
         # load input data from cmdline
         if self.opt.input is not None:
@@ -180,12 +188,13 @@ class GUI:
                 self.guidance_zero123.get_img_embeds(self.input_img_torch)
 
     def train_step(self):
+        if self.step > 600:
+            return
         starter = torch.cuda.Event(enable_timing=True)
         ender = torch.cuda.Event(enable_timing=True)
         starter.record()
 
-        for _ in range(self.train_steps):
-
+        for step_i in range(self.train_steps):
             self.step += 1
             step_ratio = min(1, self.step / self.opt.iters)
 
@@ -216,11 +225,22 @@ class GUI:
             min_ver = max(min(self.opt.min_ver, self.opt.min_ver - self.opt.elevation), -80 - self.opt.elevation)
             max_ver = min(max(self.opt.max_ver, self.opt.max_ver - self.opt.elevation), 80 - self.opt.elevation)
 
-            for _ in range(self.opt.batch_size):
+            for batch_i in range(self.opt.batch_size):
 
+                # base_point = np.array([np.cos(np.deg2rad(self.step//10*50)), 0, np.sin(np.deg2rad(self.step//10*50))])
+                # angle = 360/10*(self.step%10)
+                # target_point = base_point @ np.array([[1,0,0], [0, np.cos(np.deg2rad(angle)), -np.sin(np.deg2rad(angle))], [0, np.sin(np.deg2rad(angle)), np.cos(np.deg2rad(angle))]])
+                # ver  = np.arcsin(target_point[2])/np.pi*180
+                # hor = np.arctan2(target_point[1], target_point[0])/np.pi*180
+                ver = self.ver_hor[self.step%len(self.ver_hor)][0]
+                hor = self.ver_hor[self.step%len(self.ver_hor)][1]
+              
+                print(ver, hor)
                 # render random view
                 ver = np.random.randint(min_ver, max_ver)
                 hor = np.random.randint(-180, 180)
+                # ver = 0
+                # hor = 0
                 radius = 0
 
                 vers.append(ver)
@@ -260,6 +280,14 @@ class GUI:
             # kiui.vis.plot_image(images)
 
             # guidance loss
+            # if self.enable_sd:
+            #     if self.opt.mvdream or self.opt.imagedream:
+            #         loss = loss + (3-((self.step//10*50)%360)/180) * self.opt.lambda_sd * self.guidance_sd.train_step(images, poses, step_ratio=step_ratio if self.opt.anneal_timestep else None)
+            #     else:
+            #         loss = loss +  (3-((self.step//10*50)%360)/180) * self.opt.lambda_sd * self.guidance_sd.train_step(images, step_ratio=step_ratio if self.opt.anneal_timestep else None)
+
+            # if self.enable_zero123:
+            #     loss = loss +  (3-((self.step//10*50)%360)/180) * self.opt.lambda_zero123 * self.guidance_zero123.train_step(images, vers, hors, radii, step_ratio=step_ratio if self.opt.anneal_timestep else None, default_elevation=self.opt.elevation)
             if self.enable_sd:
                 if self.opt.mvdream or self.opt.imagedream:
                     loss = loss + self.opt.lambda_sd * self.guidance_sd.train_step(images, poses, step_ratio=step_ratio if self.opt.anneal_timestep else None)
@@ -269,6 +297,8 @@ class GUI:
             if self.enable_zero123:
                 loss = loss + self.opt.lambda_zero123 * self.guidance_zero123.train_step(images, vers, hors, radii, step_ratio=step_ratio if self.opt.anneal_timestep else None, default_elevation=self.opt.elevation)
             
+
+
             # optimize step
             loss.backward()
             self.optimizer.step()
@@ -305,6 +335,7 @@ class GUI:
         # train_steps = min(16, max(4, int(16 * 500 / full_t)))
         # if train_steps > self.train_steps * 1.2 or train_steps < self.train_steps * 0.8:
         #     self.train_steps = train_steps
+
 
     @torch.no_grad()
     def test_step(self):
