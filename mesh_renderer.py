@@ -125,9 +125,33 @@ class Renderer(nn.Module):
             vn = torch.where(torch.sum(vn * vn, -1, keepdim=True) > 1e-20, vn, torch.tensor([0.0, 0.0, 1.0], dtype=torch.float32, device=vn.device))
         else:
             vn = self.mesh.vn
+
+        
+        
         
         normal, _ = dr.interpolate(vn.unsqueeze(0).contiguous(), rast, self.mesh.fn)
+        print("proj", proj)
+
+        # light_dir = torch.rand(3, dtype=torch.float32, device=vn.device)
+        # light_dir = torch.rand(4, device=vn.device) - 0.5
+        # light_dir = torch.matmul(light_dir,
+        #                          torch.inverse(pose.T))
+        # # light_dir = torch.matmul(torch.tensor([0.0, 0.0, 1.0, 0.0], dtype=torch.float32, device=vn.device).unsqueeze(0),
+        # #                          torch.inverse(pose.T))
+        # light_dir = light_dir[..., :3]
+
+        # light_dir = light_dir/torch.norm(light_dir)
+        # diffuse_light = torch.max(torch.sum(normal*light_dir, dim=-1, keepdim=True), torch.tensor(0.0).to(device=vn.device))
+        # print("diffuse_light: ", diffuse_light.shape)
+        # print("albedo: ", albedo.shape)
+        # print("normal: ", normal.shape)
+
+        # albedo = diffuse_light*albedo
+
+
         normal = safe_normalize(normal[0])
+
+        
 
         # rotated normal (where [0, 0, 1] always faces camera)
         rot_normal = normal @ pose[:3, :3]

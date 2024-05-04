@@ -188,8 +188,8 @@ class GUI:
                 self.guidance_zero123.get_img_embeds(self.input_img_torch)
 
     def train_step(self):
-        if self.step > 600:
-            return
+        # if self.step > 600:
+        #     return
         starter = torch.cuda.Event(enable_timing=True)
         ender = torch.cuda.Event(enable_timing=True)
         starter.record()
