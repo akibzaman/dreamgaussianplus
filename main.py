@@ -153,8 +153,12 @@ class GUI:
         if self.guidance_zero123 is None and self.enable_zero123:
             print(f"[INFO] loading zero123...")
             from guidance.zero123_utils import Zero123
+            from guidance.zero123Plus_utils import Zero123PlusPlus
             if self.opt.stable_zero123:
-                self.guidance_zero123 = Zero123(self.device, model_key='ashawkey/stable-zero123-diffusers')
+                # self.guidance_zero123 = Zero123(self.device, model_key='ashawkey/stable-zero123-diffusers')
+                self.guidance_zero123 = Zero123PlusPlus(self.device, model_key="sudo-ai/zero123plus-pipeline")
+                print(f"NOW loading zero123 Plus Plus...")
+
             else:
                 self.guidance_zero123 = Zero123(self.device, model_key='ashawkey/zero123-xl-diffusers')
             print(f"[INFO] loaded zero123!")
