@@ -1,6 +1,6 @@
 # DreamGaussianPlus
 
-This repository contains DreamGaussianPlus, an extension of the official implementation for [DreamGaussian: Generative Gaussian Splatting for Efficient 3D Content Creation](https://arxiv.org/abs/2309.16653), [Project Page](https://dreamgaussian.github.io) | [Arxiv](https://arxiv.org/abs/2309.16653).
+This repository contains DreamGaussianPlus, a class project for the requirement of 6.8300: Advances in Computer Vision, Spring 2024, MIT. This work is an extension of the official implementation for [DreamGaussian: Generative Gaussian Splatting for Efficient 3D Content Creation](https://arxiv.org/abs/2309.16653), [Project Page](https://dreamgaussian.github.io) | [Arxiv](https://arxiv.org/abs/2309.16653).
 
 <!-- https://github.com/dreamgaussian/dreamgaussian/assets/25863658/db860801-7b9c-4b30-9eb9-87330175f5c8
 
