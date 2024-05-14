@@ -1,10 +1,8 @@
-# DreamGaussian
+# DreamGaussianPlus
 
-This repository contains the official implementation for [DreamGaussian: Generative Gaussian Splatting for Efficient 3D Content Creation](https://arxiv.org/abs/2309.16653).
+This repository contains DreamGaussianPlus, an extension of the official implementation for [DreamGaussian: Generative Gaussian Splatting for Efficient 3D Content Creation](https://arxiv.org/abs/2309.16653), [Project Page](https://dreamgaussian.github.io) | [Arxiv](https://arxiv.org/abs/2309.16653).
 
-### [Project Page](https://dreamgaussian.github.io) | [Arxiv](https://arxiv.org/abs/2309.16653)
-
-https://github.com/dreamgaussian/dreamgaussian/assets/25863658/db860801-7b9c-4b30-9eb9-87330175f5c8
+<!-- https://github.com/dreamgaussian/dreamgaussian/assets/25863658/db860801-7b9c-4b30-9eb9-87330175f5c8
 
 ### News
 
@@ -20,7 +18,7 @@ https://github.com/dreamgaussian/dreamgaussian/assets/25863658/db860801-7b9c-4b3
 ### [Gradio demo](https://huggingface.co/spaces/jiawei011/dreamgaussian)
 
 - Image-to-3D: <a href="https://huggingface.co/spaces/jiawei011/dreamgaussian"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Gradio%20Demo-Huggingface-orange"></a>
-- Run Gradio demo on Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1owXJthskHoVXBNvxUB0Bg0JP2Rc7QsTe?usp=sharing)
+- Run Gradio demo on Colab: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1owXJthskHoVXBNvxUB0Bg0JP2Rc7QsTe?usp=sharing) -->
 
 ## Install
 
@@ -120,7 +118,7 @@ python main.py --config configs/image_sai.yaml input=data/name_rgba.png save_pat
 python main2.py --config configs/image_sai.yaml input=data/name_rgba.png save_path=name
 ```
 
-Text-to-3D:
+<!-- Text-to-3D:
 
 ```bash
 ### training gaussian stage
@@ -128,11 +126,11 @@ python main.py --config configs/text.yaml prompt="a photo of an icecream" save_p
 
 ### training mesh stage
 python main2.py --config configs/text.yaml prompt="a photo of an icecream" save_path=icecream
-```
+``` -->
 
 Please check `./configs/text.yaml` for more options.
 
-Text-to-3D (MVDream):
+<!-- Text-to-3D (MVDream):
 
 ```bash
 ### training gaussian stage
@@ -152,7 +150,7 @@ python main.py --config configs/imagedream.yaml input=data/ghost_rgba.png prompt
 
 ### training mesh stage
 python main2.py --config configs/imagedream.yaml input=data/ghost_rgba.png prompt="a ghost eating hamburger" save_path=ghost
-```
+``` -->
 
 Helper scripts:
 
@@ -167,11 +165,11 @@ python scripts/runall_sd.py --gpu 0
 python scripts/convert_obj_to_video.py --dir ./logs
 ```
 
-Gradio Demo:
+<!-- Gradio Demo:
 
 ```bash
 python gradio_app.py
-```
+``` -->
 
 ## Tips
 * The world & camera coordinate system is the same as OpenGL:
@@ -190,14 +188,14 @@ python gradio_app.py
 elevation: in (-90, 90), from +y to -y is (-90, 90)
 azimuth: in (-180, 180), from +z to +x is (0, 90)
 ```
-
+<!-- 
 * Trouble shooting OpenGL errors (e.g., `[F glutil.cpp:338] eglInitialize() failed`): 
 ```bash
 # either try to install OpenGL correctly (usually installed with the Nvidia driver), or use force_cuda_rast:
 python main.py --config configs/image_sai.yaml input=data/name_rgba.png save_path=name force_cuda_rast=True
 
 kire mesh.obj --force_cuda_rast
-```
+``` -->
 
 ## Acknowledgement
 
@@ -208,7 +206,7 @@ This work is built on many amazing research works and open-source projects, than
 - [nvdiffrast](https://github.com/NVlabs/nvdiffrast)
 - [dearpygui](https://github.com/hoffstadt/DearPyGui)
 
-## Citation
+## Cite The Base Model
 
 ```
 @article{tang2023dreamgaussian,
