@@ -104,13 +104,7 @@ kire logs/name.obj --save images/name/ --wogui
 
 ### evaluation of CLIP-similarity
 python -m kiui.cli.clip_sim data/name_rgba.png logs/name.obj
-```
 
-Please check `./configs/image.yaml` for more options.
-
-Image-to-3D (stable-zero123):
-
-```bash
 ### training gaussian stage
 python main.py --config configs/image_sai.yaml input=data/name_rgba.png save_path=name
 
