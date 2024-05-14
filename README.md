@@ -48,7 +48,7 @@ pip install git+https://github.com/bytedance/ImageDream/#subdirectory=extern/Ima
 Tested on:
 
 <!-- - Ubuntu 22 with torch 1.12 & CUDA 11.6 on a V100. -->
-- Windows 1 with torch 2.1 & CUDA 12.1 on a 4090.
+- Windows 11 with torch 2.1 & CUDA 12.1 on a 4090.
 
 ## Usage
 
