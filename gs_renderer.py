@@ -105,7 +105,7 @@ def build_rotation(r):
     R[:, 2, 2] = 1 - 2 * (x*x + y*y)
     return R
 
-def build_scaling_rotation(s, r):
+def  build_scaling_rotation(s, r):
     L = torch.zeros((s.shape[0], 3, 3), dtype=torch.float, device="cuda")
     R = build_rotation(r)
 
@@ -242,6 +242,31 @@ class GaussianModel:
         stds = stds * self.scale
 
         covs = self.covariance_activation(stds, 1, self._rotation[mask])
+        s = 1 * stds
+        r = self._rotation[mask]
+        L = torch.zeros((s.shape[0], 3, 3), dtype=torch.float, device="cuda")
+        R = build_rotation(r)
+
+        L[:,0,0] = s[:,0]
+        L[:,1,1] = s[:,1]
+        L[:,2,2] = s[:,2]
+        
+        # for i in range(s.shape[0]):
+        #     if s[i, 0] < s[i, 1] and s[i, 0] < s[i,2]:
+        #         L[i, 1, 1] *= 1.5
+        #         L[i, 2, 2] *= 1.5
+        #     elif s[i, 1] < s[i, 0] and s[i, 1] < s[i,2]:
+        #         L[i, 0, 0] *= 1.5
+        #         L[i, 2, 2] *= 1.5
+        #     else:
+        #         L[i, 0, 0] *= 1.5
+        #         L[i, 1, 1] *= 1.5
+        
+
+        L = R @ L
+        actual_covariance = L @ L.transpose(1, 2)
+        symm = strip_symmetric(actual_covariance)
+        covs = symm
 
         # tile
         device = opacities.device
@@ -298,9 +323,11 @@ class GaussianModel:
         os.makedirs(os.path.dirname(path), exist_ok=True)
 
         occ = self.extract_fields(resolution).detach().cpu().numpy()
-
+        # print(np.max(occ))
         import mcubes
-        vertices, triangles = mcubes.marching_cubes(occ, density_thresh)
+        occ_smoothed = mcubes.smooth(occ)
+        # print(np.max(occ_smoothed))
+        vertices, triangles = mcubes.marching_cubes(occ_smoothed, 20)
         vertices = vertices / (resolution - 1.0) * 2 - 1
 
         # transform back to the original space
